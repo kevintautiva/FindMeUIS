@@ -1,0 +1,16 @@
+<resources>
+    <!-- Crea nombres que al modificarse se cambian en todos los bindeados -->
+    <string name="app_name">UIS_Finder</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">Find Me UIS</string>
+    <string name="second_fragment_label">Mapa UIS</string>
+    <string name="Analizar_Foto">Analizar Foto</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Clasificador de edificios</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="Tomar_Foto">Tomar Foto</string>
+    <string name="Mapa">Mapa</string>
+    <string name="operacion_actual">Operacion Actual:</string>
+</resources>
