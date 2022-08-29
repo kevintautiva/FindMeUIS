@@ -15,26 +15,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.Preview;
+import androidx.camera.core.VideoCapture;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.app1.databinding.ActivityMainBinding;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
+public class MainActivity extends AppCompatActivity {
+    //private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private static final int REQUEST_PERMISSION_CAMERA = 100;
     final String[] PERMISOS = {
             Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE //Agregado por camerax
     };
     private ActivityResultContracts.RequestMultiplePermissions multiplePermissionsContract;
     private ActivityResultLauncher<String[]> MultiplesPermisosLauncher;
@@ -51,6 +66,17 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        //cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        /*cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                startCameraX(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, getExecutor());*/
+
+
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
         //multiplePermissionsContract = new ActivityResultContracts.RequestMultiplePermissions();
         //Solicita los permisos
         MultiplesPermisosLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted -> {
@@ -74,6 +99,41 @@ public class MainActivity extends AppCompatActivity {
 
         askPermissions(MultiplesPermisosLauncher); //Metodo que al crearse la app se activa
     }
+
+    /*Executor getExecutor() {
+        return ContextCompat.getMainExecutor(this);
+    }
+
+    private void startCameraX(ProcessCameraProvider cameraProvider) {
+        cameraProvider.unbindAll();
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+        Preview preview = new Preview.Builder()
+                .build();
+        preview.setSurfaceProvider(VistaFoto.getSurfaceProvider());
+
+        // Image capture use case
+        imageCapture = new ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .build();
+
+        // Video capture use case
+        videoCapture = new VideoCapture.Builder()
+                .setVideoFrameRate(30)
+                .build();
+
+        // Image analysis use case
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build();
+
+        imageAnalysis.setAnalyzer(getExecutor(), this);
+
+        //bind to lifecycle:
+        cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture, videoCapture);
+    } */
+
         //llama a la solicitud de permisos
     private void askPermissions(ActivityResultLauncher<String[]> MultiplesPermisosLauncher) {
         if (!hasPermissions(PERMISOS)) {
