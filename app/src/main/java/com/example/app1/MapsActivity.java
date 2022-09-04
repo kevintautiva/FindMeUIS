@@ -25,7 +25,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        setTitle("Mapa UIS");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -77,5 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(PistAtlet).title("Pista Atletica UIS").icon(BitmapDescriptorFactory.fromResource(R.drawable.pistaatletica)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Biblioteca,16));
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setMyLocationEnabled(true);
     }
 }
