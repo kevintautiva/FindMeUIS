@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         }, getExecutor());*/
 
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        /*binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
         //multiplePermissionsContract = new ActivityResultContracts.RequestMultiplePermissions();
         //Solicita los permisos
         MultiplesPermisosLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted -> {

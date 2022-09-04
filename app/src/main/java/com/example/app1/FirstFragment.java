@@ -84,7 +84,7 @@ public class FirstFragment extends Fragment {
         view.findViewById(R.id.AnalizarFoto).setOnClickListener(new View.OnClickListener() { //Hacer accion al hacer click en el boton del id
             @Override
             public void onClick(View view) {
-                Toast myToast = Toast.makeText(getActivity(), "Analizando Imagen",Toast.LENGTH_SHORT); //Crea el mensaje que aparecera
+                Toast myToast = Toast.makeText(getActivity(), "Seleccione la Imagen",Toast.LENGTH_SHORT); //Crea el mensaje que aparecera
                 myToast.show(); //Muestra el texto
                 IniciarReconocimiento();
             }
@@ -168,21 +168,17 @@ public class FirstFragment extends Fragment {
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
 
         imageCapture.takePicture(
-                new ImageCapture.OutputFileOptions.Builder(
-                        getActivity().getContentResolver(),
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
-                ).build(),
+                new ImageCapture.OutputFileOptions.Builder(getActivity().getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues).build(),
                 getExecutor(),
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        Toast.makeText(getActivity(), "Photo has been saved successfully.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Se ha guardado la foto.", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(@NonNull ImageCaptureException exception) {
-                        Toast.makeText(getActivity(), "Error saving photo: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Error guardando foto: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 //final Bitmap bitmap previewView.getBitmap();

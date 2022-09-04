@@ -4,23 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorOnPrimary"
     tools:context=".FirstFragment">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/Mapa"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/OperacionActual" />
+        app:layout_constraintTop_toBottomOf="@+id/OperacionActual"
+        app:layout_constraintBottom_toTopOf="@+id/TomarFoto"/>
 
     <TextView
         android:id="@+id/textview_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/design_default_color_background"
+        android:background="?attr/colorOnPrimary"
         android:text="@string/hello_first_fragment"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -32,34 +32,34 @@
 
     <Button
         android:id="@+id/AnalizarFoto"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:lines="2"
         android:text="@string/Analizar_Foto"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first"
-        app:layout_constraintVertical_bias="0.8" />
-
-    <Button
-        android:id="@+id/TomarFoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Tomar_Foto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintStart_toEndOf="@+id/TomarFoto"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 
     <Button
         android:id="@+id/Mapa"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hapticFeedbackEnabled="false"
+        android:lines="2"
         android:text="@string/Mapa"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:guidelineUseRtl="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/AnalizarFoto"
-        app:layout_constraintStart_toEndOf="@+id/TomarFoto"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintEnd_toStartOf="@+id/TomarFoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 
     <TextView
         android:id="@+id/OperacionActual"
@@ -78,10 +78,21 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:elevation="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/Mapa"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/OperacionActual"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@+id/TomarFoto"/>
+
+    <ImageButton
+        android:id="@+id/TomarFoto"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/ic_shutter"
+        android:contentDescription="Capturar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

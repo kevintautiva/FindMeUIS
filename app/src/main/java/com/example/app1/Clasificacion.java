@@ -7,30 +7,41 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.app1.databinding.ActivityMainBinding;
+
+import com.example.app1.ml.Clasificador;
 import com.example.app1.ml.Model;
 
 import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.Tensor;
+import org.tensorflow.lite.support.image.TensorImage;
+import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Clasificacion extends AppCompatActivity {
 
-    Button camera, gallery;
+    Button Analizar, gallery;
     ImageView imageView;
     TextView result;
-    int imageSize = 32;
+    TextView SeguridadClas;
+    //int imageSize = 32;
+    int imageSize = 224;
+    Bitmap image = null;
     //ActivityMainBinding binding;
 
     @Override
@@ -40,10 +51,12 @@ public class Clasificacion extends AppCompatActivity {
         //binding = ActivityMainBinding.inflate(getLayoutInflater());
         //setContentView(binding.getRoot());
 
-        camera = findViewById(R.id.button);
+        //camera = findViewById(R.id.button);
+        //Analizar = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
 
         result = findViewById(R.id.result);
+        SeguridadClas = findViewById(R.id.SeguridadClas);
         imageView = findViewById(R.id.imageView);
 
         gallery.setOnClickListener(new View.OnClickListener() {
@@ -57,19 +70,47 @@ public class Clasificacion extends AppCompatActivity {
     ActivityResultLauncher<String> SeleccionFoto = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
-            Bitmap image = null;
+            image = null;
             try {
-                image = MediaStore.Images.Media.getBitmap(getContentResolver(),result);
+                image = MediaStore.Images.Media.getBitmap(getContentResolver(),result); //Obtiene el bitmap de la imagen de la galeria
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imageView.setImageURI(result);
-            image = Bitmap.createScaledBitmap(image,imageSize,imageSize,false);
-            clasificarimagen(image);
+            imageView.setImageURI(result); //Pone la imagen seleccionada para ser vista
+            //image = Bitmap.createScaledBitmap(image,imageSize,imageSize,false); //Escala la imagen a la tamano necesario para el modelo
+            image = Bitmap.createScaledBitmap(image,imageSize,imageSize,true);
+            //clasificarimagen(image);
+            ClasificarImagenes(image);
         }
     });
 
-    public void clasificarimagen (Bitmap image){
+    public void ClasificarImagenes(Bitmap image){
+        try {
+            Clasificador modelo = Clasificador.newInstance(getApplicationContext()); //Carga el modelo a usar
+
+            TensorImage imagen = TensorImage.fromBitmap(image);
+            Clasificador.Outputs salida = modelo.process(imagen);
+            // Definimos una ArrayList
+            List<Category> probabilidad = salida.getProbabilityAsCategoryList();
+
+            // Encontrar el indice de la clase con la mejor prediccion
+            int PosicionMax = 0;
+            float ProbabilidadMax = 0;
+            for (int i=0; i<probabilidad.size();i++){
+                if (probabilidad.get(i).getScore() > ProbabilidadMax){
+                    ProbabilidadMax = probabilidad.get(i).getScore();
+                    PosicionMax = i;
+                }
+            }
+            result.setText(probabilidad.get(PosicionMax).getLabel());
+            SeguridadClas.setText(new StringBuilder().append(String.valueOf(probabilidad.get(PosicionMax).getScore() * 100)).append("%").toString());
+            // Libera los recursos del modelo si no se necesitan mas
+            modelo.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+        /*public void clasificarimagen (Bitmap image){
         try {
             Model model = Model.newInstance(getApplicationContext());
 
@@ -94,12 +135,12 @@ public class Clasificacion extends AppCompatActivity {
 
             inputFeature0.loadBuffer(byteBuffer);
 
-            // Runs model inference and gets result.
+            // Ejecuta la inferencia del modelo y obtiene el resultado
             Model.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             float[] confidences = outputFeature0.getFloatArray();
-            // find the index of the class with the biggest confidence.
+            // Encontrar el indice de la clase con la mejor prediccion
             int maxPos = 0;
             float maxConfidence = 0;
             for (int i = 0; i < confidences.length; i++) {
@@ -108,14 +149,13 @@ public class Clasificacion extends AppCompatActivity {
                     maxPos = i;
                 }
             }
-            String[] classes = {"Apple", "Banana", "Orange"};
+            String[] classes = {"Centic", "E3T", "Biblioteca"};
             result.setText(classes[maxPos]);
 
-
-            // Releases model resources if no longer used.
+            // Libera los recursos del modelo si no se necesitan mas
             model.close();
         } catch (IOException e) {
             // TODO Handle the exception
         }
-    }
+    }*/
 }
