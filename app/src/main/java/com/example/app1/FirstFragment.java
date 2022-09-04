@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class FirstFragment extends Fragment {
     //String RutaImagen;
     PreviewView previewView;
     private ImageCapture imageCapture;
+    Button Mapa;
 
     @Override
     public View onCreateView(
@@ -74,7 +76,7 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Mapa = view.findViewById(R.id.Mapa);
         view.findViewById(R.id.TomarFoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,11 +91,13 @@ public class FirstFragment extends Fragment {
                 IniciarReconocimiento();
             }
         });
-        view.findViewById(R.id.Mapa).setOnClickListener(new View.OnClickListener() {
+        Mapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                Intent actividadmapa = new Intent(getActivity(),MapsActivity.class);
+                startActivity(actividadmapa);
+                //NavHostFragment.findNavController(FirstFragment.this)
+                        //.navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
         VistaImagen = view.findViewById(R.id.VistaFoto);

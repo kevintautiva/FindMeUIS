@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
     final String[] PERMISOS = {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE //Agregado por camerax
+            Manifest.permission.READ_EXTERNAL_STORAGE, //Agregado por camerax
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private ActivityResultContracts.RequestMultiplePermissions multiplePermissionsContract;
     private ActivityResultLauncher<String[]> MultiplesPermisosLauncher;
