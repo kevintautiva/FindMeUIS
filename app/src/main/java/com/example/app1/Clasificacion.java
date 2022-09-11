@@ -3,43 +3,34 @@ package com.example.app1;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.app1.databinding.ActivityMainBinding;
 import com.example.app1.ml.Clasificador;
-import com.example.app1.ml.Model;
 
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.Tensor;
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.label.Category;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Clasificacion extends FragmentActivity {
 
-    Button Analizar, gallery;
+    Button EncontrarEnMapa, gallery;
     ImageView imageView;
     TextView result;
     TextView SeguridadClas;
+    TextView EdificioObtenido;
     //int imageSize = 32;
     int imageSize = 224;
     Bitmap image = null;
@@ -49,21 +40,35 @@ public class Clasificacion extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clasificacion);
+
         //binding = ActivityMainBinding.inflate(getLayoutInflater());
         //setContentView(binding.getRoot());
 
         //camera = findViewById(R.id.button);
         //Analizar = findViewById(R.id.button);
-        gallery = findViewById(R.id.button2);
+        gallery = findViewById(R.id.Elegir_imagen);
+        EncontrarEnMapa = findViewById(R.id.Lugar_En_Mapa);
 
-        result = findViewById(R.id.result);
+        result = findViewById(R.id.Edificio_Clasificado);
         SeguridadClas = findViewById(R.id.SeguridadClas);
         imageView = findViewById(R.id.imageView);
+        EncontrarEnMapa.setEnabled(false);
+
+        EdificioObtenido = findViewById(R.id.Edificio_Obtenido);
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SeleccionFoto.launch("image/*");
+                EncontrarEnMapa.setEnabled(true);
+            }
+        });
+
+        EncontrarEnMapa.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.fragment_mapaoffline);
             }
         });
     }
@@ -111,6 +116,7 @@ public class Clasificacion extends FragmentActivity {
             e.printStackTrace();
         }
     }
+
         /*public void clasificarimagen (Bitmap image){
         try {
             Model model = Model.newInstance(getApplicationContext());
