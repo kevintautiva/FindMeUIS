@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class Clasificacion extends FragmentActivity {
     //int imageSize = 32;
     int imageSize = 224;
     Bitmap image = null;
+    public String Edificio;
     //ActivityMainBinding binding;
 
     @Override
@@ -68,7 +70,10 @@ public class Clasificacion extends FragmentActivity {
 
             @Override
             public void onClick(View view) {
-                setContentView(R.layout.fragment_mapaoffline);
+                Intent actividadmapaoffline = new Intent(getApplicationContext(),MapaOffline.class);
+                actividadmapaoffline.putExtra("Edificio",Edificio);
+                startActivity(actividadmapaoffline);
+                //setContentView(R.layout.fragment_mapaoffline);
             }
         });
     }
@@ -108,7 +113,8 @@ public class Clasificacion extends FragmentActivity {
                     PosicionMax = i;
                 }
             }
-            result.setText(probabilidad.get(PosicionMax).getLabel());
+            Edificio = probabilidad.get(PosicionMax).getLabel();
+            result.setText(Edificio);
             SeguridadClas.setText(new StringBuilder().append(String.valueOf(probabilidad.get(PosicionMax).getScore() * 100)).append("%").toString());
             // Libera los recursos del modelo si no se necesitan mas
             modelo.close();
