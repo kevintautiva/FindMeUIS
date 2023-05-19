@@ -90,7 +90,6 @@ public class Clasificacion extends FragmentActivity {
             imageView.setImageURI(result); //Pone la imagen seleccionada para ser vista
             //image = Bitmap.createScaledBitmap(image,imageSize,imageSize,false); //Escala la imagen a la tamano necesario para el modelo
             image = Bitmap.createScaledBitmap(image,imageSize,imageSize,true);
-            //clasificarimagen(image);
             ClasificarImagenes(image);
         }
     });
@@ -115,7 +114,7 @@ public class Clasificacion extends FragmentActivity {
             }
             Edificio = probabilidad.get(PosicionMax).getLabel();
             result.setText(Edificio);
-            SeguridadClas.setText(new StringBuilder().append(String.valueOf(probabilidad.get(PosicionMax).getScore() * 100)).append("%").toString());
+            SeguridadClas.setText(new StringBuilder().append(String.valueOf((int)(probabilidad.get(PosicionMax).getScore() * 100))).append("%").toString());
             // Libera los recursos del modelo si no se necesitan mas
             modelo.close();
         } catch (IOException e) {
